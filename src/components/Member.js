@@ -33,7 +33,7 @@ const Member = ({ login, avatar_url }) => {
 
         fetch(`https://api.github.com/users/${login}`, {
             headers: new Headers({
-                'Authorization': `Basic ${new Buffer(process.env.USERNAME + ":" + process.env.GITHUB_TOKEN)}`
+                'Authorization': `Basic ${new Buffer(process.env.USERNAME + ":" + process.env.GITHUB_TOKEN).toString('base64')}`
             })
         })
         .then(response => response.json())
@@ -85,6 +85,8 @@ const Member = ({ login, avatar_url }) => {
                                             </ul>
                                         </div>
                                     )
+
+                                    : null 
                             }
 
                         </div>
