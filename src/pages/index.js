@@ -1,21 +1,6 @@
 import React, { useReducer, useEffect, useState } from "react"
 import Member from "../components/Member"
-
-
-const appReducer = (state, action) => {
-    switch (action.type) {
-
-        case 'REQUEST_SUCCESS':
-            return { ...state, loading: false, members: action.payload  }
-        
-        case 'REQUEST_FAILED':
-            return { ...state, loading: false, error: action.error }
-            
-        default:
-            return state
-    }
-}
-
+import { appReducer } from "../reducers"
 
 const App = () => {
 
@@ -33,14 +18,12 @@ const App = () => {
 
         const controller = new AbortController()
 
-        fetch('https://api.github.com/orgs/grupotesseract/public_members'
-        , {
+        fetch('https://api.github.com/orgs/grupotesseract/public_members', {
             headers: new Headers({
                 'Accept': 'application/vnd.github.v3+json',
                 'Authorization': `Basic ${new Buffer(process.env.USERNAME + ":" + process.env.GITHUB_TOKEN).toString('base64')}`
             })
-          }
-        )
+        })
         .then(response => response.json())
         .then(payload => dispatch({ type: 'REQUEST_SUCCESS', payload }))
         .catch(error => dispatch({ type: 'REQUEST_FAILED', error }))

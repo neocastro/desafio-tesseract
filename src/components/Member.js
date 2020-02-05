@@ -1,22 +1,5 @@
 import React, { useReducer, useEffect } from "react"
-
-
-const memberReducer = (state, action) => {
-    switch (action.type) {
-        
-        case 'REQUEST_SUCCESS':
-            return { ...state, loading: false, memberInfo: action.payload }
-        
-        case 'REQUEST_FAILED':
-            return { ...state, loading: false, memberInfo: {}, error: action.error }
-    
-        case 'MEMBER_CLICKED':
-            return { ...state, isClicked: !state.isClicked }
-
-        default:
-            return state
-    }
-}
+import { memberReducer } from "../reducers"
 
 const Member = ({ login, avatar_url }) => {
 
@@ -31,14 +14,12 @@ const Member = ({ login, avatar_url }) => {
         
         const controller = new AbortController()
 
-        fetch(`https://api.github.com/users/${login}`
-        , {
+        fetch(`https://api.github.com/users/${login}`, {
             headers: new Headers({
                 'Accept': 'application/vnd.github.v3+json',
                 'Authorization': `Basic ${new Buffer(process.env.USERNAME + ":" + process.env.GITHUB_TOKEN).toString('base64')}`
             })
-        }
-        )
+        })
         .then(response => response.json())
         .then(({ name, public_repos, followers, created_at }) => {
             console.log(state.members)
