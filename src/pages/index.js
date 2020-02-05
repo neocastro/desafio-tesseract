@@ -4,7 +4,7 @@ import Member from "../components/Member"
 
 const appReducer = (state, action) => {
     switch (action.type) {
-        
+
         case 'REQUEST_SUCCESS':
             return { ...state, loading: false, members: action.payload  }
         
@@ -20,9 +20,9 @@ const appReducer = (state, action) => {
 const App = () => {
 
     const [state, dispatch] = useReducer(appReducer, {
-        loading: true,
         error: '',
-        members: []
+        members: [],
+        loading: true 
     })
 
     const [text, setText] = useState('')
@@ -30,19 +30,23 @@ const App = () => {
     const [filterResults, setFilterResults] = useState(state.members)
 
     useEffect(() => {
-        
+
         const controller = new AbortController()
 
-        fetch('https://api.github.com/orgs/grupotesseract/public_members', {
+        fetch('https://api.github.com/orgs/grupotesseract/public_members'
+        , {
             headers: new Headers({
+                'Accept': 'application/vnd.github.v3+json',
                 'Authorization': `Basic ${new Buffer(process.env.USERNAME + ":" + process.env.GITHUB_TOKEN).toString('base64')}`
             })
-        })
+          }
+        )
         .then(response => response.json())
         .then(payload => dispatch({ type: 'REQUEST_SUCCESS', payload }))
         .catch(error => dispatch({ type: 'REQUEST_FAILED', error }))
 
         return () => controller.abort()
+
     }, [state.members])
 
 
@@ -74,10 +78,10 @@ const App = () => {
             <div className="members-list" />
                 {
                     state.loading
-                        ? state.members
+                        ? 'Carregando...'
                         : filterResults.map(
                             m => <Member key={m.login} login={m.login} avatar_url={m.avatar_url} />
-                        )
+                        ) || state.members 
                 }
 
         </div>

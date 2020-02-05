@@ -31,16 +31,23 @@ const Member = ({ login, avatar_url }) => {
         
         const controller = new AbortController()
 
-        fetch(`https://api.github.com/users/${login}`, {
+        fetch(`https://api.github.com/users/${login}`
+        , {
             headers: new Headers({
+                'Accept': 'application/vnd.github.v3+json',
                 'Authorization': `Basic ${new Buffer(process.env.USERNAME + ":" + process.env.GITHUB_TOKEN).toString('base64')}`
             })
-        })
+        }
+        )
         .then(response => response.json())
-        .then(({ name, public_repos, followers, created_at }) => dispatch({
-            type: 'REQUEST_SUCCESS',
-            payload: { name, public_repos, followers, created_at }
-        }))
+        .then(({ name, public_repos, followers, created_at }) => {
+            console.log(state.members)
+            dispatch({
+                type: 'REQUEST_SUCCESS',
+                payload: { name, public_repos, followers, created_at }
+            })
+        }
+        )
         .catch(error => dispatch({ type: 'REQUEST_FAILED', error }))
 
         return () => controller.abort()
