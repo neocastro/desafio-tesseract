@@ -45,7 +45,7 @@ const Member = ({ login, avatar_url }) => {
 
         return () => controller.abort()
 
-    }, [login])
+    }, [state.login])
 
     const handleClick = ev => {
         ev.preventDefault()
