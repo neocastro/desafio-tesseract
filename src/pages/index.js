@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect, useState } from "react"
 import Member from "../components/Member"
 import { appReducer } from "../reducers"
+import { filterMembers } from "../helpers"
 
 const App = () => {
 
@@ -12,7 +13,7 @@ const App = () => {
 
     const [text, setText] = useState('')
 
-    const [filterResults, setFilterResults] = useState(state.members)
+    const [filterResults, setFilterResults] = useState([])
 
     useEffect(() => {
 
@@ -30,22 +31,19 @@ const App = () => {
 
         return () => controller.abort()
 
-    }, [state.members])
+    }, [])
 
 
-    useEffect(() => {
-        setFilterResults(
-            state.members.filter(
-                m => m.login.toLowerCase().includes(text.toLowerCase())
-            )
-        )
+    useEffect(() =>  {
+        setFilterResults(filterMembers(text, state.members))
+        dispatch({ type: 'FILTER_MEMBERS', payload: text })
     }, [text])
 
     const handleInputChange = ev => {
         ev.preventDefault()
         setText(ev.target.value)
+        // dispatch({ type: 'FILTER_MEMBERS', payload: ev.target.value })
     }
-
 
     return (
         <div 
@@ -70,10 +68,10 @@ const App = () => {
             <div className="members-list" />
                 {
                     state.loading
-                        ? 'Carregando...'
+                        ? <h3>Carregando informações da organização...</h3>
                         : filterResults.map(
-                            m => <Member key={m.login} login={m.login} avatar_url={m.avatar_url} />
-                        ) || state.members 
+                               m => <Member key={m.login} login={m.login} avatar_url={m.avatar_url} />
+                            ) 
                 }
 
         </div>

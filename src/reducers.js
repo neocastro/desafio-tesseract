@@ -1,3 +1,5 @@
+import { filterMembers } from "./helpers" 
+
 export const appReducer = (state, action) => {
     switch (action.type) {
 
@@ -7,6 +9,9 @@ export const appReducer = (state, action) => {
         case 'REQUEST_FAILED':
             return { ...state, loading: false, error: action.error }
             
+        case 'FILTER_MEMBER': 
+            return { ...state, members: filterMembers(action.payload, state.members) }    
+
         default:
             return state
     }

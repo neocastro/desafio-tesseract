@@ -1,5 +1,7 @@
 import React, { useReducer, useEffect } from "react"
 import { memberReducer } from "../reducers"
+import { formatDate } from "../helpers"
+
 
 const Member = ({ login, avatar_url }) => {
 
@@ -22,7 +24,6 @@ const Member = ({ login, avatar_url }) => {
         })
         .then(response => response.json())
         .then(({ name, public_repos, followers, created_at }) => {
-            console.log(state.members)
             dispatch({
                 type: 'REQUEST_SUCCESS',
                 payload: { name, public_repos, followers, created_at }
@@ -32,7 +33,7 @@ const Member = ({ login, avatar_url }) => {
 
         return () => controller.abort()
 
-    }, [state.login])
+    }, [])
 
     const handleClick = ev => {
         ev.preventDefault()
@@ -54,9 +55,25 @@ const Member = ({ login, avatar_url }) => {
                 state.loading
                     ? <h4>Carregando informações do membro...</h4>
                     : (
-                        <div className="member-card">
+                        <div 
+                            className="member-card"
+                            style={{ 
+                                textAlign: "center",
+                                display: "flex",
+                                flexDirection: "column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                margin: "auto",
+                                border: "solid",
+                                width: "auto"
+                              }}
+                        >
 
-                            <img src={state.avatar_url}></img>
+                            <img 
+                                src={state.avatar_url} 
+                                alt="gitub-avatar"
+                                style={{  width: "50%" }}
+                            />
 
 
                             <h4>
@@ -66,12 +83,18 @@ const Member = ({ login, avatar_url }) => {
                             {
                                 state.isClicked
                                     ? (
-                                        <div className="member-extra-info"> 
+                                        <div 
+                                            className="member-extra-info"
+                                            style={{
+                                                display: "flex",
+                                                flexDirection: "column",
+                                              }}  
+                                        > 
                                             <ul>
                                                 <li>Nome: {state.memberInfo.name}</li>
                                                 <li>Repositórios: {state.memberInfo.public_repos}</li>
                                                 <li>Seguidores: {state.memberInfo.followers}</li>
-                                                <li>Criado em: {state.memberInfo.created_at}</li>
+                                                <li>Criado em: {formatDate(state.memberInfo.created_at)}</li>
                                             </ul>
                                         </div>
                                     )
