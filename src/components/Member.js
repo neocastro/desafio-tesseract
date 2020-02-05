@@ -27,8 +27,7 @@ const Member = ({ login, avatar_url }) => {
                 type: 'REQUEST_SUCCESS',
                 payload: { name, public_repos, followers, created_at }
             })
-        }
-        )
+        })
         .catch(error => dispatch({ type: 'REQUEST_FAILED', error }))
 
         return () => controller.abort()
@@ -46,7 +45,10 @@ const Member = ({ login, avatar_url }) => {
             className="member"
             onClick={handleClick}
             key={state.login}
-
+            onKeyDown={handleClick}
+            key={state.login}  
+            role="button"
+            tabIndex={0}
         >
             {
                 state.loading

@@ -48,7 +48,16 @@ const App = () => {
 
 
     return (
-        <div className="App"> 
+        <div 
+            className="App"
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                width: "60%",
+                margin: "auto",
+                justifyContent: "center"
+            }} 
+        > 
 
             <input 
                 className="search-box"
