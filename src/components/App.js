@@ -16,14 +16,7 @@ const App = ({ orgName }) => {
   useEffect(() => {
     const controller = new AbortController()
 
-    fetch(`https://api.github.com/orgs/${orgName}/public_members`, {
-      headers: new Headers({
-        Accept: "application/vnd.github.v3+json",
-        Authorization: `Basic ${new Buffer(
-          process.env.USERNAME + ":" + process.env.GITHUB_TOKEN
-        ).toString("base64")}`,
-      }),
-    })
+    fetch(`https://api.github.com/orgs/${orgName}/public_members`)
       .then(response => response.json())
       .then(payload => dispatch({ type: "ORG_REQUEST_SUCCESS", payload }))
       .catch(error => dispatch({ type: "ORG_REQUEST_FAILED", error }))
