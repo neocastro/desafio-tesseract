@@ -22,14 +22,7 @@ const Member = ({ login, avatar_url }) => {
   useEffect(() => {
     const controller = new AbortController()
 
-    fetch(`https://api.github.com/users/${login}`, {
-      headers: new Headers({
-        Accept: "application/vnd.github.v3+json",
-        Authorization: `Basic ${new Buffer(
-          process.env.USERNAME + ":" + process.env.GITHUB_TOKEN
-        ).toString("base64")}`,
-      }),
-    })
+    fetch(`https://api.github.com/users/${login}`)
       .then(response => response.json())
       .then(({ name, public_repos, followers, created_at }) => {
         dispatch({
